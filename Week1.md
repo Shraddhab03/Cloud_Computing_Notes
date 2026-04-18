@@ -88,10 +88,10 @@ Explain each pillar in a single line with example:
    *Example:* AWS Identity and Access Management (IAM).  
 
 2. **Cost Optimization** – Efficiently manages expenses.  
-   *Example:* Using auto-scaling to reduce unused resources.  
+   *Example:* Using auto-scaling to reduce unused resources. Follows 'pay-as-you-go' model 
 
 3. **Reliability** – Ensures systems run consistently.  
-   *Example:* Redundant servers in Google Cloud.  
+   *Example:* Redundant servers in Google Cloud. 
 
 4. **Performance Efficiency** – Optimizes resources for speed and responsiveness.  
    *Example:* Content Delivery Networks (CDNs) for faster website access.  
@@ -106,3 +106,57 @@ Explain each pillar in a single line with example:
    *Example:* Automated monitoring tools in AWS CloudWatch.  
 
 ---
+
+## Day 4: AWS Global Infrastructure
+### Components:
+A) Region:
+AWS has data centres in various places, named as Regions.
+eg. US East (N. Virginia), Asia Pacific (Mumbai) 
+- Each region contains many available zones (AZ). AZs are isolated data centres connected with high internet speed, which may conatin 60k-80k servers.
+
+B) Edge Locations:
+These are speacalized data centres, where AWS services being used in more amount. These are designed to cache data via Amazon CloudFront and reduce latency for end users.
+
+Key feautures and Benefits:
+- **Reduced Latency** : Data travels from neaby edge location resulting in reduced travel time as a result low latency as result application running with fast speed.
+- **Enchanced Performance** : benificial while browsing data, streaming media resulting in good user experience.
+- **Content caching** : Stores cached data of videos,photos and website content, primarly used by Amazon cloudFront.
+
+Key use cases: **Amazon CloudFront**, **Lambda@Edge**, **Amazon Route 53**
+1. Amazon CloudFront : Delivers data to user with low latency
+2. Lambda@Edge : xecutes Lambda functions at edge locations to customize content, acting closer to the user.
+3. Amazon Route 53 :  Uses edge locations to improve the speed and responsiveness of DNS queries
+
+c) AWS Global Network: 
+- AWS has global fiber network connecting Regions,AZs and edge locations. As result, faster data transfer, low latency and better user experience.
+
+D) Data Centers:
+- AWS data centers are secure, physical facilities that house critical IT infrastructure—servers, storage, and networking equipment—supporting cloud services.
+
+---
+
+## Day 5: Cloud Storage and Service Models
+**Cloud Storage** - Storing data in cloud storage instead of local hard drive and accessing it via internet.
+
+Key feautures and Benefits:
+1. Accessiblity : One can access data from anywhere stored on cloud storage via internet connection.
+2. Scalability and elasticity: One can increase/decrease the storage capacity as required
+3. Cost Efffective: Pay as you use, pay for the used services
+4. Security and backup: Providers often handle encryption, data redundancy, and automatic backups, protecting against data loss from hardware failure.
+
+**Cloud Service Model** - IaaS, PaaS, and SaaS—define how computing resources are delivered over the internet, ranging from raw infrastructure to ready-to-use software.
+
+1. Iaas -  Infrastructure as a Service 
+Provided computing resources like VMs, storage and network on demands. Users mostly manages OS, applications and Data.
+*eg:* Amazon EC2
+
+2. Paas - Platform as a service
+Provided OS, Servers, offers hardware & software tools often needed for app. development. Users manages application and data.
+*eg:* Google App Engine.
+
+3. Saas - Software as a service
+Service provider manages everything, user only uses the provided software.
+*eg:* - Google Workspace
+
+**Cloud Layers** 
+Networking → Storage → Servers → Virtualization → OS → Middleware → Runtime → Data → Application
