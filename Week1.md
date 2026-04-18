@@ -158,5 +158,6 @@ Provided OS, Servers, offers hardware & software tools often needed for app. dev
 Service provider manages everything, user only uses the provided software.
 *eg:* - Google Workspace
 
-**Cloud Layers** 
+**Cloud Layers** :
+
 Networking → Storage → Servers → Virtualization → OS → Middleware → Runtime → Data → Application
