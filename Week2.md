@@ -407,3 +407,294 @@ Someone deletes multiple files
 - All files can be restored  
 - No permanent loss 
 
+-----
+
+# Day 9: AWS S3 Replication & Transfer Acceleration
+## What is S3 Replication?
+- S3 Replication automatically **copies objects from a source bucket to a destination bucket** based on defined rules.
+- It helps in maintaining **duplicate data across locations**
+
+Replication in S3 is **asynchronous**, which means:
+  - Data is not copied immediately at the same time  
+  - There is a **small delay** between upload and replication  
+### Simple Example:
+1. You upload a file to Source Bucket  
+2. File is available immediately in source
+3. After a few seconds/minutes → it appears in destination  
+This delay is called **asynchronous behavior**
+
+### Real-Life Analogy
+- Sending a WhatsApp message 📩  
+- You send → it reaches instantly to you  
+- Receiver may get it after a slight delay
+
+Not exactly at the same moment → asynchronous
+
+## Why use Replication?
+
+- Disaster recovery (backup in another region)  
+- High availability  
+- Compliance (data stored in multiple locations)  
+- Reduce latency for global users  
+- Data redundancy 
+
+## Types of Replication
+
+### 1. Cross-Region Replication (CRR)
+- Replicates data to a **different AWS region**
+
+#### Example:
+- Source → Mumbai (ap-south-1)  
+- Destination → US-East (us-east-1)
+
+#### Use Cases:
+- Disaster recovery  
+- Global applications  
+- Data compliance across countries  
+
+### 2. Same-Region Replication (SRR)
+- Replicates data within the **same region**
+
+#### Example:
+- Two buckets in ap-south-1  
+
+#### Use Cases:
+- Log aggregation  
+- Data sharing between teams  
+- Data segregation (prod vs analytics) 
+
+
+## Key Requirements for Replication
+
+- Versioning must be **enabled on both buckets**  
+- Source and destination buckets must exist  
+- IAM Role with required permissions  
+- Replication rule must be configured  
+
+
+## How Replication Works (Step-by-Step)
+
+1. Upload object to source bucket  
+2. S3 checks replication rules  
+3. Object is queued for replication  
+4. Copied to destination bucket  
+Process happens in background (asynchronous)
+
+## Important Points to remebemer
+
+- Only **new objects** are replicated  
+- Existing objects are NOT replicated by default  
+- Delete markers can be replicated (optional)  
+- Replication may take time (not instant)  
+- Additional cost applies
+
+## RTC
+### Replication Time Control (RTC)
+- Provides **predictable replication time**
+- Replication happens within ~15 minutes  
+- Useful for compliance requirements
+
+### Replication of Delete Markers
+- When enabled:
+  - Deleting file in source → also deleted in destination
+  
+--
+
+## What is S3 Transfer Acceleration?
+Transfer Acceleration improves **upload speed to S3** using AWS global network.
+- Especially useful when uploading from distant locations
+
+## How Transfer Acceleration Works
+
+1. User uploads file  
+2. Request goes to nearest **AWS Edge Location**  
+3. Data travels through AWS internal high-speed network  
+4. Reaches S3 bucket  
+ Faster than normal internet routing
+
+## Why is it Faster?
+
+- Uses optimized AWS backbone network  
+- Avoids slow public internet routes  
+- Uses nearest edge location  
+
+## When to Use Transfer Acceleration?
+
+- Large file uploads (videos, backups)  
+- Global users uploading data  
+- High latency or slow networks
+
+## Benefits
+
+- Faster uploads globally  
+- Better performance for large files  
+- Reduced latency  
+- Reliable transfer
+
+### Without Transfer Acceleration
+- Upload from India → US bucket  
+Slow due to internet routing  
+### With Transfer Acceleration
+- Upload → nearest AWS edge → internal network → S3  
+ Much faster
+
+## Important Notes
+
+- Must be explicitly **enabled on bucket** 
+- Extra charges apply
+
+## Key Takeaway
+- Replication ensures **data redundancy, backup, and availability**  
+- It is **asynchronous**, meaning replication happens with a delay  
+- Transfer Acceleration improves **upload speed using AWS global infrastructure** 
+
+
+
+# Real-World Example: Bahrain AWS Disaster (2026)
+
+AWS data centers in the Middle East (UAE and Bahrain) were impacted due to **drone strikes and regional conflict**.
+
+- Data centers faced:
+  - Power outages  
+  - Structural damage  
+  - Network disruptions  
+- Many AWS services (EC2, S3, etc.) were affected  
+- Some regions became partially or completely unavailable  
+
+So, AWS advised customers to **migrate workloads to other regions** for continuity :contentReference[oaicite:0]{index=0}  
+
+## What Went Wrong?
+
+- Many companies had their data stored in a **single region (Bahrain/UAE)**  
+- Their disaster recovery (DR) strategy was **not multi-region**  
+- When that region was impacted →  
+  - Applications went down  
+  - Services became unavailable  
+  
+## Key Learning (Very Important)
+
+1. **Multi-AZ is NOT enough**  
+- Even if you use multiple Availability Zones  
+- They are still in the same region  
+
+If the entire region fails → everything fails  
+
+## How Replication Helps (Connection to Your Topic)
+
+If companies had used:
+
+### 1. Cross-Region Replication (CRR)
+- Data would be copied to another region (e.g., Europe/India)  
+- Applications could switch to backup region  
+
+### 2. Disaster Recovery Strategy
+- Failover to another region  
+- Minimal downtime  
+
+Companies with proper setup recovered much faster  
+
+-----
+
+# Day 10: AWS S3 Glacier & Archival Storage
+
+
+## What is S3 Glacier?
+
+Amazon S3 Glacier is a **low-cost storage service designed for long-term data archiving**.
+Used for data that is:
+- Rarely accessed  
+- Stored for months or years  
+- Important but not needed frequently  
+
+## Why use Glacier?
+
+- Very low storage cost 
+- Suitable for backups and archives  
+- Helps reduce overall AWS storage cost  
+
+## Variants Of S3 Glacier
+
+### 1. S3 Glacier Instant Retrieval
+- Archive storage with **instant access**  
+- Milliseconds retrieval time  
+- Slightly higher cost than other Glacier tiers    
+
+### 2. S3 Glacier Flexible Retrieval
+- Low-cost archival storage  
+- Retrieval time varies  
+
+#### Retrieval Options:
+- **Expedited** → 1–5 minutes (costly)  
+- **Standard** → 3–5 hours  
+- **Bulk** → 5–12 hours (cheapest)  
+
+Best for:
+- Backups that are not urgently required  
+---
+
+### 3. S3 Glacier Deep Archive
+- Cheapest storage option  
+- Retrieval time: **12–48 hours**  
+
+Best for:
+- Long-term backups  
+- Compliance and legal data  
+---
+
+## Key Differences
+
+| Storage Class              | Cost        | Retrieval Time     | Use Case                  |
+|---------------------------|-------------|--------------------|---------------------------|
+| Glacier Instant           | Medium      | Instant            | Quick access archive      |
+| Glacier Flexible          | Low         | Minutes–Hours      | Backup data               |
+| Glacier Deep Archive      | Lowest      | Hours              | Long-term storage         |
+
+---
+
+## Important Concepts
+
+### 1. Retrieval Time vs Cost
+- Faster retrieval = higher cost  
+- Slower retrieval = cheaper  
+---
+### 2. Minimum Storage Duration
+
+- Glacier Instant → 90 days  
+- Glacier Flexible → 90 days  
+- Glacier Deep Archive → 180 days  
+---
+### 3. Lifecycle Integration
+
+Glacier is commonly used with lifecycle policies:
+
+Example:
+- Day 0 → Store in S3 Standard  
+- Day 30 → Move to Standard-IA  
+- Day 90 → Move to Glacier  
+- Day 180 → Move to Deep Archive  
+
+## Real-Time Examples
+
+### 1. Backup Storage
+- Daily backups stored in Glacier  
+- Saves cost compared to S3 Standard  
+
+### 2. Compliance Data
+- Financial/legal data stored for years  
+- Rarely accessed but must be available
+
+## When NOT to Use Glacier (IMP)
+
+- Frequently accessed data  
+- Real-time applications  
+- Low-latency requirements  
+
+## Key Takeaway
+
+S3 Glacier is used for **cost-effective long-term storage**.  
+Choosing the right variant depends on:
+- How often you access data  
+- How quickly you need it  
+- Budget constraints  
+
+NOTE: Creatig S3 glacier buckets is currenlty not avaiable for new users. 
